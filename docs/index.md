@@ -2,6 +2,8 @@
 
 欢迎来到我的个人技术文档网站。本网站记录我在开源软件课程中学习 Markdown、MkDocs、GitHub Actions 和 GitHub Pages 的过程。
 
+> 自动部署验证：2026 年 11 月 12 日第二次推送后，网站内容已成功更新。
+
 - 作者：`ttt587`
 - 实践主题：静态文档的自动构建与部署
 - 项目源码：[GitHub 仓库](https://github.com/ttt587/my-docs)

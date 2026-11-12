@@ -1,0 +1,27 @@
+site_name: 开源软件学习笔记
+site_description: 记录 Markdown、MkDocs、GitHub Actions 与 GitHub Pages 的实践过程
+site_url: https://ttt587.github.io/my-docs/
+repo_url: https://github.com/ttt587/my-docs
+repo_name: ttt587/my-docs
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+
+nav:
+  - 首页: index.md
+  - 关于项目: about.md
+  - 使用指南: guide.md
+  - API 参考: api.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+

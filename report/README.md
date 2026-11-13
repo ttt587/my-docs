@@ -2,7 +2,7 @@
 
 ## 1. 基本信息
 
-- 姓名：待补充
+- 姓名：谭灿英
 - GitHub 登录名：`ttt587`
 - 个人仓库地址：<https://github.com/ttt587/my-docs>
 - 最终网站地址：<https://ttt587.github.io/my-docs/>

@@ -1,0 +1,10 @@
+flowchart LR
+  coding[coding-agent]
+  chord --> schema; chord --> telemetry
+  ai --> schema; ai --> telemetry
+  durable --> chord; durable --> ai; durable --> codemode
+  durable --> schema; durable --> telemetry
+  env --> chord; env --> durable
+  agent --> ai; agent --> schema
+  coding --> agent; coding --> ai
+  coding --> codemode; coding --> mcp; coding --> tui

@@ -32,6 +32,10 @@ Pi版本：`1.5.2`
 
 向 Pi 附加 `seven.png`，要求识别背景、前景、形状和数字。Pi 正确识别出蓝色背景、白色前景、正方形和数字 `7`。
 
+原始测试图片：
+
+![原始测试图片](seven.png)
+
 ![S5 图片识别](screenshots/S5-image-recognition.png)
 
 ## 6. Pi Package安装与调用
@@ -40,6 +44,10 @@ Pi版本：`1.5.2`
 
 ![S6 Pi Package安装与调用](screenshots/S6-package.png)
 
+重新启动 Pi 后，截图顶部的 `[Extensions] pi-web-access:dist` 表明插件已被成功发现并加载；随后实际调用网页访问工具读取 example.com，返回标题 `Example Domain`。
+
+![重启Pi后的扩展加载证据](screenshots/S7-extension-restart.png)
+
 ## 7. 实践结论
 
-本次实践完成了Pi安装、模型配置、首次会话、模型与思考级别切换、代码文件引用、图片识别和扩展安装调用。六项必做内容均已通过真实运行截图记录。
+本次实践完成了Pi安装、模型配置、首次会话、模型与思考级别切换、代码文件引用、图片识别和扩展安装调用。以上实践过程均已通过七张真实运行截图记录，并补充了原始测试图片。

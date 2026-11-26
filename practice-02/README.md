@@ -9,7 +9,7 @@ HEAD：`c3cc91632d0a1950fb122605b190233f2aa0006e`
 ## 1. 仓库信息
 
 ```text
-本地路径：C:\Users\谭灿英\Documents\Codex\2026-11-16\new-chat\work\pi-hunnu-2026
+本地路径：C:\pi-hunnu-2026-main-evidence
 remote：origin https://github.com/tri-queens-code-lab/pi-hunnu-2026.git
 分支：main
 HEAD：c3cc91632d0a1950fb122605b190233f2aa0006e
@@ -19,6 +19,14 @@ status：## main...origin/main
 工作区无被跟踪文件修改，未使用GitHub的“Sync fork”。
 
 ![仓库与本地状态](screenshots/P2-S1-repository.png)
+
+![小组GitHub组织仓库main分支](screenshots/P2-S6-group-repository.png)
+
+该截图显示 GitHub 组织 `tri-queens-code-lab`、仓库 `pi-hunnu-2026`、`main` 分支和源码目录。
+
+![个人本地源码目录与Git信息](screenshots/P2-S5-local-directory.png)
+
+该截图同时显示本地源码路径、仓库根目录、`packages` 目录内容、`origin`、`main` 分支、完整 HEAD 以及工作区状态。
 
 ## 2. 根目录和子模块的构建配置
 

@@ -1,0 +1,13 @@
+flowchart LR
+    U[User prompt] --> CA[coding-agent]
+    CA --> A[agent: runLoop]
+    A --> AI[ai: streamFunction]
+    AI --> RM[Remote model service]
+    RM -->|Direct answer| A
+    RM -->|toolCall: read| A
+    A --> RT[Local read tool]
+    RT --> TR[toolResult]
+    TR --> A
+    A -->|Next model request| AI
+    A --> CA
+    CA --> U

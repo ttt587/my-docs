@@ -43,6 +43,8 @@ status：## main...origin/main
 
 ## 3. 11个模块分析
 
+本人重点分析的模块是 `coding-agent`。它是面向编码任务的交互式 CLI，位于依赖关系的上层，直接整合 `agent`、`ai`、`codemode`、`mcp` 和 `tui`，因此适合作为观察各模块协作方式的入口。
+
 | 模块 | 主要功能 | 构建动作与主要产物 | 直接内部依赖 | 证据文件 |
 |---|---|---|---|---|
 | telemetry | 遥测契约、适配器、合规测试及类型化schema工具 | `tsc -p tsconfig.build.json`；生成 `dist` JS和声明文件 | 无 | `packages/telemetry/package.json`、`src/index.ts` |
@@ -64,6 +66,8 @@ status：## main...origin/main
 ## 4. 模块依赖图
 
 箭头方向统一为“使用者 → 被依赖模块”。可编辑源文件：[module-dependencies.mmd](module-dependencies.mmd)。
+
+依赖图的层级依据各模块 `package.json` 中以 `@earendil-works/` 开头的直接 `dependencies` 划分：无内部依赖的模块作为基础层；只依赖基础层的模块置于其上；继续依赖这些模块的 `durable`、`env` 和 `coding-agent` 等逐层上移。开发依赖和传递依赖不参与层级划分。
 
 ```mermaid
 flowchart LR

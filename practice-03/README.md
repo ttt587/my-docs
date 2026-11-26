@@ -75,6 +75,7 @@ node .\packages\coding-agent\dist\bundle\cli.js --version -> 1.5.2
 .\pi-test.bat --version -> 1.5.2
 git status --short --branch -> ## main...origin/main
 ```
+源码入口适合开发调试，可以直接观察模块加载过程并定位源码问题；`dist/bundle/cli.js` 是完整构建后生成的打包 CLI，适合验证编译产物能否独立启动、版本是否正确以及资源是否完整。
 
 ![S5 完整构建与产物核验](screenshots/S5-build-and-verify.png)
 
@@ -83,6 +84,12 @@ git status --short --branch -> ## main...origin/main
 通过 `pi-test.bat` 从本地源码启动Pi v1.5.2，使用 `openai-codex/gpt-6.1-sol`、`minimal`思考级别发送简单问题。Pi正常返回“Pi本地源码运行成功。”，说明本地源码、登录状态和模型调用均正常。
 
 ![S6 本地Pi交互](screenshots/S6-local-pi-interaction.png)
+
+## 困难与解决过程
+
+首次在包含中文用户名的原始仓库路径中构建时，流程在复制 provider 数据阶段失败，问题出现在 Node 的 `fs.cpSync` 文件复制环节。检查 Node、npm 和依赖安装结果后，确认并非源码或依赖缺失导致。
+
+为避免修改小组源码，我在纯英文物理路径 `C:\pi-hunnu-2026-build` 重新克隆同一仓库，并核对 `origin`、`main` 分支和 HEAD 均与原仓库一致。随后重新安装依赖并执行完整构建，最终退出代码为 `0`，`dist/bundle/cli.js` 和 `pi-test.bat` 均能正确输出版本 `1.5.2`。未单独保留失败界面截图，因此在报告中完整记录了故障现象、排查依据和解决方法。
 
 ## 实践结论
 

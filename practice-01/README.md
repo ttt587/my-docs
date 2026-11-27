@@ -12,15 +12,21 @@ Pi版本：`1.5.2`
 
 ## 2. 配置模型与首次会话
 
-选择 `openai-codex/gpt-6.1-sol`，思考级别设为 `minimal`。首次会话能够正常回答编程学习问题，登录凭据仅保存在本机，截图和仓库中均未包含 token、API Key 或 `auth.json`。
+选择 `openai-codex/gpt-6.1-sol`，思考级别设为 `minimal`。Pi 正确回答了 Python 列表与元组的区别；截图右下角清楚显示当前状态为 `gpt-6.1-sol · minimal`。登录凭据仅保存在本机，截图和仓库中均未包含 token、API Key 或 `auth.json`。
 
 ![S2 配置模型与首次会话](screenshots/S2-first-conversation.png)
 
 ## 3. 切换模型和思考级别
 
-切换前为 `gpt-6.1-sol / minimal`，切换后为 `gpt-6.1-terra / high`。新模型正常回答了递归概念问题。
+切换前为 `gpt-6.1-sol / minimal`，切换后为 `gpt-6.1-terra / high`。S2 记录切换前的模型和思考级别；S3 保留切换前的 `Thinking level: minimal`，显示切换后的 `Thinking level: high`，右下角同时显示当前状态 `gpt-6.1-terra · high`。切换后的模型正确回答了集合包含关系的传递性问题。
 
 ![S3 模型与思考级别切换](screenshots/S3-model-thinking.png)
+
+切换前后界面并列对照：
+
+| 切换前：`gpt-6.1-sol · minimal` | 切换后：`gpt-6.1-terra · high` |
+|---|---|
+| ![切换前模型与思考级别](screenshots/S2-first-conversation.png) | ![切换后模型与思考级别](screenshots/S3-model-thinking.png) |
 
 ## 4. 使用@引用代码文件
 
@@ -44,7 +50,7 @@ Pi版本：`1.5.2`
 
 ![S6 Pi Package安装与调用](screenshots/S6-package.png)
 
-重新启动 Pi 后，截图顶部的 `[Extensions] pi-web-access:dist` 表明插件已被成功发现并加载；随后实际调用网页访问工具读取 example.com，返回标题 `Example Domain`。
+重新启动 Pi 后，截图顶部的 `[Extensions] pi-web-access:dist` 表明插件已被成功发现并加载。会话先调用 `web_enable` 启用 `web_search`、`source_check`、`fetch_content` 和 `get_search_content`，随后实际调用网页访问工具读取 `https://example.com`。第一次可读文本提取提示内容不完整，插件自动使用 `raw` 模式重新获取成功；最终回答明确给出工具 `fetch_content`、标题 `Example Domain` 以及网页第一段正文。
 
 ![重启Pi后的扩展加载证据](screenshots/S7-extension-restart.png)
 

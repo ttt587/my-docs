@@ -12,7 +12,7 @@ sequenceDiagram
     Note over M,R: 模型只能决定调用工具，不能直接访问本地文件
     M-->>A: toolCall: read({path: "handoff.txt"})
     A->>R: executeToolCalls() L520<br/>→ read.execute() L245
-    R->>R: resolveReadPathAsync()<br/>readFile()/selectLines...
+    R->>R: resolveReadPathAsync()<br/>createReadStream() → selectLinesFromStream()
     R-->>A: toolResult：待办与完整启动命令
     A->>A: toolResult 加入 currentContext.messages
     A->>M: 第 2 次模型请求<br/>携带更新后的上下文

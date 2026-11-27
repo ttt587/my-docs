@@ -60,7 +60,7 @@ sequenceDiagram
     Note over M,R: 模型只能决定调用工具，不能直接访问本地文件
     M-->>A: toolCall: read({path: "handoff.txt"})
     A->>R: executeToolCalls() L520<br/>→ read.execute() L245
-    R->>R: resolveReadPathAsync()<br/>readFile()/selectLines...
+    R->>R: resolveReadPathAsync()<br/>createReadStream() → selectLinesFromStream()
     R-->>A: toolResult：待办与完整启动命令
     A->>A: toolResult 加入 currentContext.messages
     A->>M: 第 2 次模型请求<br/>携带更新后的上下文
@@ -82,6 +82,8 @@ sequenceDiagram
 | 本地工具层 | `packages/coding-agent/src/core/tools/read.ts`：`execute()`（L245）、`resolveReadPathAsync()`（L267） | 解析本地路径并读取文件，返回 `toolResult` |
 
 本实验中的关键边界是：远程模型不直接读取 `handoff.txt`。它只返回 `toolCall`；文件访问发生在本机的 `read.execute()` 中。读取结果成为 `toolResult` 并进入 `currentContext.messages` 后，下一次模型请求才包含文件内容。
+
+本次 `handoff.txt` 是正常短文本，调用 `read` 时没有提供特殊的 `offset` 或 `limit`，因此满足 `isStreamableRange()`，实际读取路径是 `ops.createReadStream(absolutePath, { signal })` → `selectLinesFromStream()`。只有运行环境没有提供 `createReadStream`，或者参数属于小数、负数 `limit` 等不满足流式范围的特殊情况时，才会回退到 `ops.readFile()` → `selectLinesFromBuffer()` 的缓冲区读取路径。
 
 ## 五、实验 B1：使用 `-c` 恢复旧会话
 

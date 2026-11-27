@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    actor U as 用户
+    participant I as 交互/会话层<br/>onSubmit L3325<br/>AgentSession.prompt L2175
+    participant A as Agent 执行层<br/>Agent.prompt L382<br/>runAgentLoop L111
+    participant M as 模型请求层<br/>streamAssistantResponse L391<br/>远程模型
+    participant R as read 工具<br/>execute L245
+
+    U->>I: 提交“读取 handoff.txt”
+    I->>A: session.prompt(text)<br/>Agent.prompt() → runAgentLoop()
+    A->>M: 第 1 次模型请求<br/>发送会话消息和工具定义
+    Note over M,R: 模型只能决定调用工具，不能直接访问本地文件
+    M-->>A: toolCall: read({path: "handoff.txt"})
+    A->>R: executeToolCalls() L520<br/>→ read.execute() L245
+    R->>R: resolveReadPathAsync()<br/>readFile()/selectLines...
+    R-->>A: toolResult：待办与完整启动命令
+    A->>A: toolResult 加入 currentContext.messages
+    A->>M: 第 2 次模型请求<br/>携带更新后的上下文
+    M-->>A: 最终自然语言回答
+    A-->>I: message_update L3649<br/>message_end L3685
+    I-->>U: 终端显示待办与启动命令

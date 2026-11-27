@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor U as 用户
+    participant C as CLI / 交互层
+    participant S as SessionManager
+    participant A as Agent
+    participant M as 远程模型
+
+    rect rgb(232, 245, 233)
+        Note over U,M: 旧会话恢复：使用 -c
+        U->>C: 以 -c 启动同一项目
+        C->>S: main.ts L479<br/>continueRecent(cwd) L1811
+        S-->>A: 恢复最近会话消息<br/>其中已有 handoff.txt 的工具结果
+        U->>C: 询问 README 启动说明<br/>并要求不调用工具
+        C->>A: 提交提示词 + 已恢复上下文
+        A->>M: 1 次模型请求
+        M-->>A: 返回完整命令<br/>npm run demo -- --profile river-5879
+        A-->>U: 显示可用的启动说明
+    end
+
+    rect rgb(255, 235, 238)
+        Note over U,M: 新会话：执行 /new
+        U->>C: 输入 /new
+        C->>S: runtimeHost.newSession() L226<br/>SessionManager.newSession() L1065
+        S-->>A: 创建空白会话<br/>不包含旧工具结果
+        U->>C: 提交完全相同的问题
+        C->>A: 提交提示词 + 新上下文
+        A->>M: 1 次模型请求
+        M-->>A: 无法得知交接单命令
+        A-->>U: 明确说明缺少完整启动命令
+    end

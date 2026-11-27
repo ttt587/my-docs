@@ -25,11 +25,17 @@ GitHub：`ttt587`
 
 ### 1. 工具结果写入上下文后
 
-在工具执行结果被加入 `currentContext.messages` 和 `newMessages` 后输出：
+在遍历每个工具结果时，先将当前 `result` 写入 `currentContext.messages`，随后立即输出日志，再写入 `newMessages`：
 
 ```ts
-console.error("[P4] 工具结果已加入上下文");
+for (const result of toolResults) {
+    currentContext.messages.push(result);
+    console.error("[P4] 工具结果已加入上下文");
+    newMessages.push(result);
+}
 ```
+
+![S2a 工具结果日志位于循环内部并紧跟上下文写入](screenshots/S2a-tool-result-log.png)
 
 ### 2. 请求模型前
 
@@ -37,7 +43,12 @@ console.error("[P4] 工具结果已加入上下文");
 
 ```ts
 console.error("[P4] Agent 即将请求模型");
+const response = await streamFunction(config.model, llmContext, {
+    // ...
+});
 ```
+
+![S2b 模型请求日志紧邻 streamFunction](screenshots/S2b-model-request-log.png)
 
 实验文件 `practice4.txt` 的内容为：
 
@@ -45,26 +56,26 @@ console.error("[P4] Agent 即将请求模型");
 实验代号：P4-TANCANYING-2026
 ```
 
-![S2 两处日志与实验文件](screenshots/S2-source-changes.png)
-
 ## 四、检查、构建与产物
 
-源码修改后执行：
+源码修改后先执行检查。在线构建在更新第三方模型目录时遇到 Vercel AI Gateway `403`，该步骤与本次 Agent 源码修改无关，因此改用仓库自带的离线完整构建脚本：
 
 ```powershell
 npm.cmd run check
-npm.cmd run build
+npm.cmd run build:offline
+$LASTEXITCODE
+Test-Path -LiteralPath '.\packages\coding-agent\dist\bundle\cli.js'
 ```
 
 最终结果：
 
 - 完整代码检查通过。
-- 11个模块完整构建成功，退出代码为 `0`。
+- 11个模块通过仓库自带的 `build:offline` 完整重新构建，`$LASTEXITCODE` 为 `0`。
 - `coding-agent` bundle 共生成 `84 files, 9.4 MiB`。
-- `packages/coding-agent/dist/bundle/cli.js` 存在。
+- `Test-Path` 返回 `True`，确认 `packages/coding-agent/dist/bundle/cli.js` 存在。
 - 本地源码 CLI 版本为 `1.5.2`。
 
-构建期间模型目录服务曾短暂出现 DNS/连接重置，启用 Node 环境代理并重试后完整构建成功；未通过修改小组源码规避构建步骤。
+`build:offline` 仍会重新编译包括 `agent` 和 `coding-agent` 在内的全部模块，只复用仓库中已生成并校验通过的模型数据，避免构建结果受第三方目录接口影响；未通过修改小组源码规避检查或编译步骤。
 
 ![S3 完整构建与产物核验](screenshots/S3-build-verify.png)
 
@@ -72,8 +83,9 @@ npm.cmd run build
 
 配置：
 
-- 模型：`openai-codex/gpt-6.1-sol`
-- thinking：`minimal`
+- 启动入口：本地编译产物 `packages/coding-agent/dist/bundle/cli.js`
+- 模型：`gpt-6.1-terra`
+- thinking：`medium`
 - 工具：禁用
 - 提问：用一句话解释 Git 分支是什么
 
@@ -81,18 +93,18 @@ npm.cmd run build
 
 ```text
 [P4] Agent 即将请求模型
-Git 分支是一条独立的开发线，让你在不影响主线代码的情况下开发新功能或修复问题，并在完成后合并回主线。
+Git 分支是指向某个提交的可移动指针，让你可以独立开发而不影响其他分支。
 ```
 
-会话A没有工具调用，只请求模型一次，模型直接给出最终回答。
+截图顶部显示 Pi `v1.5.2`，底部显示本地项目路径 `C:\pi-hunnu-2026-build`，证明运行的是当前仓库重新构建的本地 CLI。会话A没有工具调用，只请求模型一次，模型直接给出最终回答。
 
 ![S4 会话A](screenshots/S4-session-a.png)
 
 ## 六、会话B：读取文件
 
-配置与会话A保持相同，仅启用 `read` 工具，并要求 Pi 使用该工具读取 `practice4.txt` 后只回答实验代号。
+使用 `/new` 创建新会话，配置与会话A保持相同，并要求 Pi 使用 `read` 工具读取 `practice4.txt` 后只回答实验代号。
 
-真实日志和回答：
+真实 Pi 界面中清楚显示 `read practice4.txt` 工具记录、工具结果写入上下文日志、下一次模型请求日志和最终回答：
 
 ```text
 [P4] Agent 即将请求模型
